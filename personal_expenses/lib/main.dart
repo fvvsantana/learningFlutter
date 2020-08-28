@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<Transaction> transations = [
+  final List<Transaction> _transactions = [
     Transaction(
       id: 't1',
       title: 'Soccer ball',
@@ -47,8 +47,12 @@ class MyHomePage extends StatelessWidget {
               elevation: 5,
             ),
           ),
-          Card(
-            child: Text('List of transactions'),
+          Column(
+            children: _transactions
+                .map((tx) => Card(
+                      child: Text(tx.title),
+                    ))
+                .toList(),
           ),
         ],
       ),
