@@ -91,7 +91,7 @@ class MyHomePage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                DateFormat().format(tx.date),
+                                DateFormat.yMMMd().format(tx.date),
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),
