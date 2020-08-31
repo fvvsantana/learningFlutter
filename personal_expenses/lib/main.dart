@@ -38,7 +38,6 @@ class MyHomePage extends StatelessWidget {
         title: Text('Flutter App'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Chart
@@ -48,6 +47,29 @@ class MyHomePage extends StatelessWidget {
               color: Colors.blue,
               child: Text('Chart here'),
               elevation: 5,
+            ),
+          ),
+          // Card for adding transactions
+          Card(
+            elevation: 5,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Title'),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Amount'),
+                  ),
+                  FlatButton(
+                    onPressed: () {},
+                    child: Text('Add transaction'),
+                    textColor: Colors.purple,
+                  ),
+                ],
+              ),
             ),
           ),
           // List of transactions
