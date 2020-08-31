@@ -39,6 +39,7 @@ class MyHomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Chart
           Container(
             width: double.infinity,
             child: Card(
@@ -47,12 +48,14 @@ class MyHomePage extends StatelessWidget {
               elevation: 5,
             ),
           ),
+          // List of transactions
           Column(
             children: _transactions
                 .map(
                   (tx) => Card(
                     child: Row(
                       children: [
+                        // Transaction amount
                         Container(
                           margin: EdgeInsets.symmetric(
                             vertical: 10,
@@ -62,10 +65,17 @@ class MyHomePage extends StatelessWidget {
                           decoration: BoxDecoration(
                             border: Border.all(
                               width: 2,
-                              color: Colors.black,
+                              color: Colors.purple,
                             ),
                           ),
-                          child: Text(tx.amount.toString()),
+                          child: Text(
+                            tx.amount.toString(),
+                            style: TextStyle(
+                              color: Colors.purple,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                         Column(
                           children: [
