@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personal_expenses/widgets/transaction_list.dart';
 import './models/transaction.dart';
 import './widgets/new_transaction.dart';
 import './widgets/chart.dart';
+import './widgets/transaction_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -72,6 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _removeTransaction(String id){
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
+    });
+  }
+
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -106,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // Chart
             Chart(_recentTransactions),
             // Transaction list
-            TransactionList(_userTransactions),
+            TransactionList(_userTransactions, _removeTransaction),
           ],
         ),
       ),
