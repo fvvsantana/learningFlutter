@@ -12,20 +12,24 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return transactions.length == 0
         // Message and image of no transactions added
-        ? Column(children: [
-            Text(
-              'No transactions added yet.',
-              style: Theme.of(context).textTheme.headline6,
+        ? LayoutBuilder(
+            builder: (ctx, constraints) => Column(
+              children: [
+                Text(
+                  'No transactions added yet.',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  height: constraints.maxHeight * 0.6,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            SizedBox(
-              child: Image.asset(
-                'assets/images/waiting.png',
-                fit: BoxFit.cover,
-              ),
-              height: 200,
-            )
-          ])
+          )
         // List of transactions
         : Container(
             child: ListView.builder(
@@ -54,7 +58,7 @@ class TransactionList extends StatelessWidget {
                     '${DateFormat.yMMMd().format(transactions[index].date)}',
                   ),
                   trailing: IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       removeTransaction(transactions[index].id);
                     },
                     icon: Icon(
