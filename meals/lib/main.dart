@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         MealDetailScreen.routeName: (_) => MealDetailScreen(),
       },
 
+      // Used as a 404 not found page
       onUnknownRoute: (settings){
         return MaterialPageRoute(builder: (_) => CategoriesScreen());
       },
