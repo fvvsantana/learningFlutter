@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CategoryMealsScreen extends StatelessWidget {
+  static final routeName = '/category-meals';
+
   @override
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context).settings.arguments as Map<String,String>;
