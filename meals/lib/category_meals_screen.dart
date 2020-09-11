@@ -12,17 +12,19 @@ class CategoryMealsScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, String>;
     final categoryId = arg['id'];
     final categoryTitle = arg['title'];
-    final List<Meal> meals =
-        DUMMY_MEALS.where((meal) => meal.categories.contains(categoryId)).toList();
+    final List<Meal> meals = DUMMY_MEALS
+        .where((meal) => meal.categories.contains(categoryId))
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryTitle),
       ),
-      body: Center(
-          child: Column(
-        children: meals.map((meal) => Text(meal.title)).toList(),
-      )),
+      body: ListView.builder(
+        itemBuilder: (ctx, index) => Text(meals[index].title),
+        itemCount: meals.length,
+      
+      ),
     );
   }
 }
