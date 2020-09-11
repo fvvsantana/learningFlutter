@@ -25,11 +25,20 @@ class MealItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
+        elevation: 4,
+        margin: EdgeInsets.all(10),
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.network(imageUrl),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  child: Image.network(imageUrl),
+                ),
+              ],
             )
           ],
         ),
