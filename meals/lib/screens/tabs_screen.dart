@@ -32,7 +32,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dooh'),
+        title: Text(pages[pageIndex]['title']),
       ),
       body: pages[pageIndex]['page'],
       drawer: MainDrawer(),
