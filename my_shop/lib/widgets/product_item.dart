@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/product.dart';
 
 import '../screens/product_detail_screen.dart';
+import '../providers/product.dart';
+import '../providers/cart.dart';
+
 
 class ProductItem extends StatelessWidget {
   @override
@@ -27,7 +29,8 @@ class ProductItem extends StatelessWidget {
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
             builder: (_, prod, __) => IconButton(
-              icon: Icon(prod.isFavorite ? Icons.favorite : Icons.favorite_border),
+              icon: Icon(
+                  prod.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
               onPressed: () {
                 prod.toggleIsFavorite();
@@ -38,12 +41,16 @@ class ProductItem extends StatelessWidget {
             product.title,
             textAlign: TextAlign.center,
           ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
+          trailing: Consumer<Cart>(
+            builder: (_, cart, __) => IconButton(
+              icon: Icon(
+                Icons.shopping_cart,
+              ),
+              onPressed: () {
+                cart.addItem(product.id, product.price, product.title);
+              },
+              color: Theme.of(context).accentColor,
             ),
-            onPressed: () {},
-            color: Theme.of(context).accentColor,
           ),
         ),
       ),
