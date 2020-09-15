@@ -21,7 +21,6 @@ class Cart with ChangeNotifier {
     return Map.from(items);
   }
 
-/*
   int get itemCount {
     return _items.length;
   }
@@ -55,5 +54,4 @@ class Cart with ChangeNotifier {
     }
     notifyListeners();
   }
-  */
 }
