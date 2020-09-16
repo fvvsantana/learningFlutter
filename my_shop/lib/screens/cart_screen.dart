@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart.dart';
+import '../providers/cart.dart' show Cart;
+import '../widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -16,9 +17,9 @@ class CartScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Card(
-            margin: const EdgeInsets.all(8),
+            margin: EdgeInsets.all(15),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -28,7 +29,6 @@ class CartScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   Chip(
-                    backgroundColor: Theme.of(context).primaryColor,
                     label: Text(
                       '\$${cart.totalAmount}',
                       style: TextStyle(
@@ -36,16 +36,33 @@ class CartScreen extends StatelessWidget {
                             Theme.of(context).primaryTextTheme.headline6.color,
                       ),
                     ),
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   FlatButton(
                     child: Text('ORDER NOW'),
                     onPressed: () {},
                     textColor: Theme.of(context).primaryColor,
-                  ),
+                  )
                 ],
               ),
             ),
           ),
+          SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+                itemCount: cart.itemCount,
+                itemBuilder: (_, i) {
+                  final key = cart.items.keys.elementAt(i);
+                  final cartItem = cart.items[key];
+                  return CartItem(
+                    cartItem.id,
+                    key,
+                    cartItem.price,
+                    cartItem.quantity,
+                    cartItem.title,
+                  );
+                }),
+          )
         ],
       ),
     );
