@@ -25,6 +25,11 @@ class Cart with ChangeNotifier {
     return _items.length;
   }
 
+  double get totalAmount {
+    return _items.keys
+        .fold(0, (sum, key) => sum + _items[key].quantity * _items[key].price);
+  }
+
   void addItem(
     String productId,
     double price,
@@ -35,21 +40,21 @@ class Cart with ChangeNotifier {
       _items.update(
         productId,
         (existingCartItem) => CartItem(
-              id: existingCartItem.id,
-              title: existingCartItem.title,
-              price: existingCartItem.price,
-              quantity: existingCartItem.quantity + 1,
-            ),
+          id: existingCartItem.id,
+          title: existingCartItem.title,
+          price: existingCartItem.price,
+          quantity: existingCartItem.quantity + 1,
+        ),
       );
     } else {
       _items.putIfAbsent(
         productId,
         () => CartItem(
-              id: DateTime.now().toString(),
-              title: title,
-              price: price,
-              quantity: 1,
-            ),
+          id: DateTime.now().toString(),
+          title: title,
+          price: price,
+          quantity: 1,
+        ),
       );
     }
     notifyListeners();
