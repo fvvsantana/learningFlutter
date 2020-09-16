@@ -51,7 +51,6 @@ class CartScreen extends StatelessWidget {
                         cart.totalAmount,
                       );
                       cart.clear();
-                      Navigator.of(context).pushNamed(OrdersScreen.routeName);
                     },
                     textColor: Theme.of(context).primaryColor,
                   )
