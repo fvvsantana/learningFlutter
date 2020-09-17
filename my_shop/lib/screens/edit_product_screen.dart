@@ -24,32 +24,34 @@ class _EditProductScreenState extends State<EditProductScreen> {
       appBar: AppBar(
         title: const Text('Edit Product'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Form(
-          child: ListView(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Title'),
-                textInputAction: TextInputAction.next,
-                onEditingComplete: () =>
-                    FocusScope.of(context).requestFocus(_priceFocusNode),
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Price'),
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                focusNode: _priceFocusNode,
-                onEditingComplete: () =>
-                    FocusScope.of(context).requestFocus(_descriptionFocusNode),
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
-                keyboardType: TextInputType.multiline,
-                focusNode: _descriptionFocusNode,
-                maxLines: 3,
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Title'),
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () =>
+                      FocusScope.of(context).requestFocus(_priceFocusNode),
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Price'),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  focusNode: _priceFocusNode,
+                  onEditingComplete: () => FocusScope.of(context)
+                      .requestFocus(_descriptionFocusNode),
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Description'),
+                  keyboardType: TextInputType.multiline,
+                  focusNode: _descriptionFocusNode,
+                  maxLines: 3,
+                ),
+              ],
+            ),
           ),
         ),
       ),
