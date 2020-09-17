@@ -12,9 +12,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit product'),
+        title: const Text('Edit Product'),
       ),
-      body: null,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Form(
+          child: ListView(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Title'),
+                textInputAction: TextInputAction.next,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
