@@ -85,8 +85,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onEditingComplete: () =>
                       FocusScope.of(context).requestFocus(_priceFocusNode),
                   onSaved: (title) => _productData.title = title,
-                  validator: (title) =>
-                      title.isEmpty ? 'Please provide a title' : null,
+                  validator: (value) => value.isEmpty ? 'Please provide a value' : null,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Price'),
@@ -96,6 +95,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onEditingComplete: () => FocusScope.of(context)
                       .requestFocus(_descriptionFocusNode),
                   onSaved: (price) => _productData.price = double.parse(price),
+                  validator: (value) => value.isEmpty ? 'Please provide a value' : null,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Description'),
@@ -104,6 +104,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 3,
                   onSaved: (description) =>
                       _productData.description = description,
+                  validator: (value) => value.isEmpty ? 'Please provide a value' : null,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -136,6 +137,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         controller: _imageUrlController,
                         onEditingComplete: () => setState(() {}),
                         onSaved: (imageUrl) => _productData.imageUrl = imageUrl,
+                        validator: (value) => value.isEmpty ? 'Please provide a value' : null,
                       ),
                     ),
                   ],
