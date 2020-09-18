@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/product.dart';
+import 'package:flutter_complete_guide/providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static final routeName = '/edit-product';
@@ -51,16 +54,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _submitData() {
     final isValid = _form.currentState.validate();
-    if(!isValid) return;
+    if (!isValid) return;
 
     _form.currentState.save();
-
-    _productData.id = DateTime.now().toString();
-    print(_productData.id);
-    print(_productData.title);
-    print(_productData.description);
-    print(_productData.price);
-    print(_productData.imageUrl);
+    Provider.of<Products>(context, listen: false).addProduct(Product(
+      id: DateTime.now().toString(),
+      title: _productData.title,
+      description: _productData.description,
+      imageUrl: _productData.imageUrl,
+      price: _productData.price,
+    ));
+    Navigator.of(context).pop();
   }
 
   @override
@@ -85,7 +89,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onEditingComplete: () =>
                       FocusScope.of(context).requestFocus(_priceFocusNode),
                   onSaved: (title) => _productData.title = title,
-                  validator: (value) => value.isEmpty ? 'Please provide a value' : null,
+                  validator: (value) =>
+                      value.isEmpty ? 'Please provide a value' : null,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Price'),
@@ -95,7 +100,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onEditingComplete: () => FocusScope.of(context)
                       .requestFocus(_descriptionFocusNode),
                   onSaved: (price) => _productData.price = double.parse(price),
-                  validator: (value) => value.isEmpty ? 'Please provide a value' : null,
+                  validator: (value) =>
+                      value.isEmpty ? 'Please provide a value' : null,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Description'),
@@ -104,7 +110,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 3,
                   onSaved: (description) =>
                       _productData.description = description,
-                  validator: (value) => value.isEmpty ? 'Please provide a value' : null,
+                  validator: (value) =>
+                      value.isEmpty ? 'Please provide a value' : null,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -137,7 +144,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         controller: _imageUrlController,
                         onEditingComplete: () => setState(() {}),
                         onSaved: (imageUrl) => _productData.imageUrl = imageUrl,
-                        validator: (value) => value.isEmpty ? 'Please provide a value' : null,
+                        validator: (value) =>
+                            value.isEmpty ? 'Please provide a value' : null,
                       ),
                     ),
                   ],
