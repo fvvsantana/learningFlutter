@@ -108,7 +108,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
         imageUrl: _productData.imageUrl,
         price: _productData.price,
       ))
-          .then((_) {
+          .catchError((error) {
+        return showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: const Text('An error occured'),
+                  content: const Text('Something went wrong.'),
+                  actions: [
+                    FlatButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Okay')),
+                  ],
+                ));
+      }).then((_) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.of(context).pop();
       });
       setState(() {
