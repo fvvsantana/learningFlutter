@@ -16,6 +16,7 @@ class _ProductData {
   String description;
   double price;
   String imageUrl;
+  bool isFavorite;
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
@@ -41,6 +42,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void didChangeDependencies() {
     if (_firstCall) {
       final String productId = ModalRoute.of(context).settings.arguments;
+      // If editing
       if (productId != null) {
         final product =
             Provider.of<Products>(context, listen: false).findById(productId);
@@ -49,12 +51,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
         _initialData.description = product.description;
         _initialData.price = product.price;
         _initialData.imageUrl = product.imageUrl;
+        _initialData.isFavorite = product.isFavorite;
 
         _imageUrlController.text = _initialData.imageUrl;
       }
     }
 
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
@@ -81,13 +83,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid) return;
 
     _form.currentState.save();
-    Provider.of<Products>(context, listen: false).addProduct(Product(
-      id: DateTime.now().toString(),
-      title: _productData.title,
-      description: _productData.description,
-      imageUrl: _productData.imageUrl,
-      price: _productData.price,
-    ));
+
+    if (_initialData.id == null) {
+      Provider.of<Products>(context, listen: false).addProduct(Product(
+        id: DateTime.now().toString(),
+        title: _productData.title,
+        description: _productData.description,
+        imageUrl: _productData.imageUrl,
+        price: _productData.price,
+      ));
+    } else {
+      Provider.of<Products>(context, listen: false).updateProduct(Product(
+        id: _initialData.id,
+        isFavorite: _initialData.isFavorite,
+        title: _productData.title,
+        description: _productData.description,
+        imageUrl: _productData.imageUrl,
+        price: _productData.price,
+      ));
+    }
     Navigator.of(context).pop();
   }
 
