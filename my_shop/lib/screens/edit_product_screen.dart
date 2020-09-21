@@ -28,10 +28,34 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   final _productData = _ProductData();
 
+  var _firstCall = true;
+  final _initialData = _ProductData();
+
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImage);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_firstCall) {
+      final String productId = ModalRoute.of(context).settings.arguments;
+      if (productId != null) {
+        final product =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _initialData.id = product.id;
+        _initialData.title = product.title;
+        _initialData.description = product.description;
+        _initialData.price = product.price;
+        _initialData.imageUrl = product.imageUrl;
+
+        _imageUrlController.text = _initialData.imageUrl;
+      }
+    }
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -84,6 +108,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _initialData.title,
                   decoration: const InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
                   onEditingComplete: () =>
@@ -93,6 +118,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       value.isEmpty ? 'Please provide a value' : null,
                 ),
                 TextFormField(
+                  initialValue: _initialData.price != null
+                      ? _initialData.price.toStringAsFixed(2)
+                      : null,
                   decoration: InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
@@ -104,6 +132,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       value.isEmpty ? 'Please provide a value' : null,
                 ),
                 TextFormField(
+                  initialValue: _initialData.description,
                   decoration: InputDecoration(labelText: 'Description'),
                   keyboardType: TextInputType.multiline,
                   focusNode: _descriptionFocusNode,
