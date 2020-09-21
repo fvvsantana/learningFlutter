@@ -31,6 +31,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   var _firstCall = true;
   final _initialData = _ProductData();
+  var _isEditing = false;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       final String productId = ModalRoute.of(context).settings.arguments;
       // If editing
       if (productId != null) {
+        _isEditing = true;
         final product =
             Provider.of<Products>(context, listen: false).findById(productId);
         _initialData.id = product.id;
@@ -84,18 +86,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     _form.currentState.save();
 
-    if (_initialData.id == null) {
-      Provider.of<Products>(context, listen: false).addProduct(Product(
-        id: DateTime.now().toString(),
+    if (_isEditing) {
+      Provider.of<Products>(context, listen: false).updateProduct(Product(
+        id: _initialData.id,
+        isFavorite: _initialData.isFavorite,
         title: _productData.title,
         description: _productData.description,
         imageUrl: _productData.imageUrl,
         price: _productData.price,
       ));
     } else {
-      Provider.of<Products>(context, listen: false).updateProduct(Product(
-        id: _initialData.id,
-        isFavorite: _initialData.isFavorite,
+      Provider.of<Products>(context, listen: false).addProduct(Product(
+        id: DateTime.now().toString(),
         title: _productData.title,
         description: _productData.description,
         imageUrl: _productData.imageUrl,
@@ -109,7 +111,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Product'),
+        title: _isEditing? const Text('Edit Product') : const Text('Add Product'),
         actions: [
           IconButton(icon: Icon(Icons.save), onPressed: _submitData),
         ],

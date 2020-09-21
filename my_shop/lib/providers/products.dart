@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+
 import './product.dart';
 
 class Products with ChangeNotifier {
@@ -46,6 +50,18 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    final url = 'https://my-shop-82dad.firebaseio.com/products.json';
+    http.post(url, body: json.encode(
+      {
+        'title': product.title,
+        'description': product.description,
+        'price': product.price,
+        'imageUrl': product.imageUrl,
+        'isFavorite': product.isFavorite,
+      }
+    ));
+
+
     _items.add(Product(
       id: DateTime.now().toString(),
       title: product.title,
