@@ -49,32 +49,32 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  Future<void> addProduct(Product product) {
-    final url = 'https://my-shop-82dad.firebaseio.com/products';
-    return http
-        .post(url,
-            body: json.encode({
-              'title': product.title,
-              'description': product.description,
-              'price': product.price,
-              'imageUrl': product.imageUrl,
-              'isFavorite': product.isFavorite,
-            }))
-        .then((response) {
-      _items.add(Product(
-        id: json.decode(response.body)['name'],
-        title: product.title,
-        description: product.description,
-        imageUrl: product.imageUrl,
-        price: product.price,
-        isFavorite: product.isFavorite,
-      ));
-      //_items.add(product)
-      notifyListeners();
-    }).catchError((error) {
+  Future<void> addProduct(Product product) async {
+    final url = 'https://my-shop-82dad.firebaseio.com/products.json';
+    http.Response response;
+    try {
+      response = await http.post(url,
+          body: json.encode({
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'imageUrl': product.imageUrl,
+            'isFavorite': product.isFavorite,
+          }));
+    } catch (error) {
       print(error);
       throw error;
-    });
+    }
+
+    _items.add(Product(
+      id: json.decode(response.body)['name'],
+      title: product.title,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      isFavorite: product.isFavorite,
+    ));
+    notifyListeners();
   }
 
   Product findById(String id) {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/product.dart';
 import 'package:flutter_complete_guide/providers/products.dart';
@@ -82,7 +81,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _submitData() {
+  void _submitData() async {
     final isValid = _form.currentState.validate();
     if (!isValid) return;
 
@@ -99,38 +98,37 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ));
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(Product(
-        id: DateTime.now().toString(),
-        title: _productData.title,
-        description: _productData.description,
-        imageUrl: _productData.imageUrl,
-        price: _productData.price,
-      ))
-          .catchError((error) {
-        return showDialog(
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await Provider.of<Products>(context, listen: false).addProduct(Product(
+          id: DateTime.now().toString(),
+          title: _productData.title,
+          description: _productData.description,
+          imageUrl: _productData.imageUrl,
+          price: _productData.price,
+        ));
+      } catch (error) {
+        await showDialog(
             context: context,
             builder: (_) => AlertDialog(
                   title: const Text('An error occured'),
                   content: const Text('Something went wrong.'),
                   actions: [
                     FlatButton(
-                        onPressed: (){
-                          Navigator.of(context).pop();
+                        onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: const Text('Okay')),
                   ],
                 ));
-      }).then((_) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
-      setState(() {
-        _isLoading = true;
-      });
+      }
     }
   }
 
@@ -208,12 +206,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             child: _imageUrlController.text.isEmpty
                                 ? Text('Enter a URL')
                                 : FittedBox(
-                                    child:
-                                        Image.network(_imageUrlController.text, errorBuilder: (_, exception, stackTrace){
-                                          print(exception);
-                                          print(stackTrace);
-                                          return Text('😢');
-                                        },),
+                                    child: Image.network(
+                                      _imageUrlController.text,
+                                      errorBuilder: (_, exception, stackTrace) {
+                                        print(exception);
+                                        print(stackTrace);
+                                        return Text('😢');
+                                      },
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                           ),
