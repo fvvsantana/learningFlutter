@@ -49,6 +49,13 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
+  Future<void> fetchAndSetProducts() async {
+    final url = 'https://my-shop-82dad.firebaseio.com/products.json';
+    final response = await http.get(url);
+
+    print(json.decode(response.body));
+  }
+
   Future<void> addProduct(Product product) async {
     final url = 'https://my-shop-82dad.firebaseio.com/products.json';
     http.Response response;
