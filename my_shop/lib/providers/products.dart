@@ -51,9 +51,25 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     final url = 'https://my-shop-82dad.firebaseio.com/products.json';
-    final response = await http.get(url);
+    http.Response response;
+    try {
+      response = await http.get(url);
+    } catch (error) {
+      throw error;
+    }
 
-    print(json.decode(response.body));
+    final Map<String, dynamic> data = json.decode(response.body);
+    data.forEach((prodId, prodData) {
+      _items.add(Product(
+        id: prodId,
+        title: prodData['title'],
+        description: prodData['description'],
+        price: prodData['price'],
+        imageUrl: prodData['imageUrl'],
+        isFavorite: prodData['isFavorite'],
+      ));
+    });
+    notifyListeners();
   }
 
   Future<void> addProduct(Product product) async {

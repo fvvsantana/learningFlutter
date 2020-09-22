@@ -21,11 +21,21 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   FilterOptions _currentOption = FilterOptions.All;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    Provider.of<Products>(context, listen: false).fetchAndSetProducts();
+    setState(() {
+      isLoading = true;
+    });
+    Provider.of<Products>(context, listen: false)
+        .fetchAndSetProducts()
+        .then((_) {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   @override
@@ -67,7 +77,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(_currentOption == FilterOptions.Favorites),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(_currentOption == FilterOptions.Favorites),
     );
   }
 }
