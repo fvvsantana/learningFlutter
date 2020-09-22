@@ -130,7 +130,18 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+    // Opmitistic deletion
+    final url = 'https://my-shop-82dad.firebaseio.com/products/$id.json';
+    final index = _items.indexWhere((prod) => prod.id == id);
+    final product = _items.elementAt(index);
+    _items.removeAt(index);
     notifyListeners();
+
+    http.delete(url).then((response){
+      if(response.statusCode >= 400){
+        _items.insert(index, product);
+        notifyListeners();
+      }
+    });
   }
 }
