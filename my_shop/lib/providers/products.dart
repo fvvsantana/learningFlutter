@@ -7,6 +7,7 @@ import './product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
+/*
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -39,6 +40,7 @@ class Products with ChangeNotifier {
       imageUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
+    */
   ];
 
   List<Product> get items {
@@ -59,16 +61,21 @@ class Products with ChangeNotifier {
     }
 
     final Map<String, dynamic> data = json.decode(response.body);
+    List<Product> fetchedProducts = [];
     data.forEach((prodId, prodData) {
-      _items.add(Product(
+      final product = Product(
         id: prodId,
         title: prodData['title'],
         description: prodData['description'],
         price: prodData['price'],
         imageUrl: prodData['imageUrl'],
         isFavorite: prodData['isFavorite'],
-      ));
+      );
+      fetchedProducts.add(product);
+
     });
+    _items = fetchedProducts;
+
     notifyListeners();
   }
 
