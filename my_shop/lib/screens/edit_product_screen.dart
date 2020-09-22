@@ -1,4 +1,3 @@
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/product.dart';
