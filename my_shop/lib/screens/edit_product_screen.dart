@@ -87,8 +87,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     _form.currentState.save();
 
+    setState(() {
+      _isLoading = true;
+    });
     if (_isEditing) {
-      Provider.of<Products>(context, listen: false).updateProduct(Product(
+      await Provider.of<Products>(context, listen: false).updateProduct(Product(
         id: _initialData.id,
         isFavorite: _initialData.isFavorite,
         title: _productData.title,
@@ -96,11 +99,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
         imageUrl: _productData.imageUrl,
         price: _productData.price,
       ));
+      setState(() {
+        _isLoading = false;
+      });
       Navigator.of(context).pop();
     } else {
-      setState(() {
-        _isLoading = true;
-      });
       try {
         await Provider.of<Products>(context, listen: false).addProduct(Product(
           id: DateTime.now().toString(),

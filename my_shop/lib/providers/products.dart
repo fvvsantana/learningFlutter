@@ -72,7 +72,6 @@ class Products with ChangeNotifier {
         isFavorite: prodData['isFavorite'],
       );
       fetchedProducts.add(product);
-
     });
     _items = fetchedProducts;
 
@@ -111,7 +110,20 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
+    // Update remotely
+    final url =
+        'https://my-shop-82dad.firebaseio.com/products/${product.id}.json';
+    await http.patch(url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        }));
+
+    // Update locally
     final index = _items.indexWhere((prod) => prod.id == product.id);
     _items[index] = product;
     notifyListeners();
