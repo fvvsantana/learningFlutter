@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter_complete_guide/utils/links.dart';
+import 'package:http/http.dart' as http;
 
 import './cart.dart';
 
@@ -23,13 +27,28 @@ class Orders with ChangeNotifier {
     return List.from(_orders);
   }
 
-  void addOrder(List<CartItem> cartProducts, double total) {
+  Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+    final url = '${Links.databaseUrl}/orders.json';
+    final now = DateTime.now();
+
+    final response = await http.post(url,
+        body: json.encode({
+          'amount': total,
+          'products': cartProducts.map((prod) => {
+                'id': prod.id,
+                'title': prod.title,
+                'price': prod.price,
+                'quantity': prod.quantity,
+              }).toList(),
+          'dateTime': now.toIso8601String(),
+        }));
+
     _orders.insert(
       0,
       OrderItem(
-        id: DateTime.now().toString(),
+        id: json.decode(response.body)['name'],
         amount: total,
-        dateTime: DateTime.now(),
+        dateTime: now,
         products: cartProducts,
       ),
     );

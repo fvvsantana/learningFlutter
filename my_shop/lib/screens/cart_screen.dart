@@ -41,8 +41,8 @@ class CartScreen extends StatelessWidget {
                   ),
                   FlatButton(
                     child: Text('ORDER NOW'),
-                    onPressed: () {
-                      Provider.of<Orders>(
+                    onPressed: () async {
+                      await Provider.of<Orders>(
                         context,
                         listen: false,
                       ).addOrder(
