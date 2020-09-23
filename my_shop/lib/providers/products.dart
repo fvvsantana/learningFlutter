@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_complete_guide/models/http_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -129,7 +130,7 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     // Opmitistic deletion
     final url = 'https://my-shop-82dad.firebaseio.com/products/$id.json';
     final index = _items.indexWhere((prod) => prod.id == id);
@@ -137,11 +138,11 @@ class Products with ChangeNotifier {
     _items.removeAt(index);
     notifyListeners();
 
-    http.delete(url).then((response){
-      if(response.statusCode >= 400){
-        _items.insert(index, product);
-        notifyListeners();
-      }
-    });
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _items.insert(index, product);
+      notifyListeners();
+      throw HttpException('Couldn\'t delete product');
+    }
   }
 }
