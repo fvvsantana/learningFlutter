@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_complete_guide/models/http_exception.dart';
+import 'package:flutter_complete_guide/utils/links.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = 'https://my-shop-82dad.firebaseio.com/products.json';
+    final url = '${Links.databaseUrl}/products.json';
     http.Response response;
     try {
       response = await http.get(url);
@@ -80,7 +81,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = 'https://my-shop-82dad.firebaseio.com/products.json';
+    final url = '${Links.databaseUrl}/products.json';
     http.Response response;
     try {
       response = await http.post(url,
@@ -114,7 +115,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     // Update remotely
     final url =
-        'https://my-shop-82dad.firebaseio.com/products/${product.id}.json';
+        '${Links.databaseUrl}/products/${product.id}.json';
     await http.patch(url,
         body: json.encode({
           'title': product.title,
@@ -132,7 +133,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     // Opmitistic deletion
-    final url = 'https://my-shop-82dad.firebaseio.com/products/$id.json';
+    final url = '${Links.databaseUrl}/products/$id.json';
     final index = _items.indexWhere((prod) => prod.id == id);
     final product = _items.elementAt(index);
     _items.removeAt(index);

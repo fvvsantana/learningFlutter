@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_complete_guide/models/http_exception.dart';
+import 'package:flutter_complete_guide/utils/links.dart';
 import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
@@ -26,7 +27,7 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final url = '$baseUrl/products/$id';
+    final url = '${Links.databaseUrl}/products/$id';
 
     http.Response response;
     final revertFavorite = () {
