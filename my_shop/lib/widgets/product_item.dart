@@ -8,6 +8,7 @@ import '../providers/cart.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final product = Provider.of<Product>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -31,8 +32,14 @@ class ProductItem extends StatelessWidget {
               icon: Icon(
                   prod.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
-              onPressed: () {
-                prod.toggleIsFavorite();
+              onPressed: () async {
+                try {
+                  await prod.toggleIsFavorite();
+                } catch (error) {
+                  scaffold.showSnackBar(SnackBar(
+                    content: Text(error.toString()),
+                  ));
+                }
               },
             ),
           ),
