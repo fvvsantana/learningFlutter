@@ -6,8 +6,19 @@ import 'package:flutter/cupertino.dart';
 
 class Auth with ChangeNotifier{
   String _token;
-  String _expiryDate;
+  DateTime _expiryDate;
   String _userId;
+
+  bool get isAuthenticated{
+    return token != null;
+  }
+
+  String get token{
+    if(_expiryDate != null && _expiryDate.isAfter(DateTime.now()) && _token != null){
+      return _token;
+    }
+    return null;
+  }
 
   Future<void> _authenticate(String email, String password, String url) async{
     final response = await http.post(url, body: json.encode({
@@ -15,7 +26,13 @@ class Auth with ChangeNotifier{
       'password': password,
       'returnSecureToken': true,
     }));
-    print(response.body);
+    final data = json.decode(response.body);
+    if(data == null) return;
+    _token = data['idToken'];
+    _userId = data['localId'];
+    _expiryDate = DateTime.now().add(Duration(seconds: int.parse(data['expiresIn'])));
+    notifyListeners();
+    
   }
 
   Future<void> signUp(String email, String password) async{
