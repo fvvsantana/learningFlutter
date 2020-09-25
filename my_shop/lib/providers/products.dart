@@ -45,6 +45,11 @@ class Products with ChangeNotifier {
     */
   ];
 
+  final String _token;
+
+  Products(this._token, this._items);
+
+
   List<Product> get items {
     return List<Product>.from(_items);
   }
@@ -54,7 +59,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = '${Links.databaseUrl}/products.json';
+    final url = '${Links.databaseUrl}/products.json?auth=$_token';
     http.Response response;
     try {
       response = await http.get(url);
