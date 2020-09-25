@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/auth.dart';
+import 'package:flutter_complete_guide/providers/product.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/products.dart';
@@ -17,8 +19,9 @@ class ProductsGrid extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
-      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-        value: products[i],
+      itemBuilder: (ctx, i) => ChangeNotifierProxyProvider<Auth, Product>(
+        create: (_) => products[i],
+        update: (_, auth, product) => product..token = auth.token,
         child: ProductItem(),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -45,10 +45,7 @@ class Products with ChangeNotifier {
     */
   ];
 
-  final String _token;
-
-  Products(this._token, this._items);
-
+  String token;
 
   List<Product> get items {
     return List<Product>.from(_items);
@@ -59,7 +56,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = '${Links.databaseUrl}/products.json?auth=$_token';
+    final url = '${Links.databaseUrl}/products.json?auth=$token';
     http.Response response;
     try {
       response = await http.get(url);
@@ -89,7 +86,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = '${Links.databaseUrl}/products.json';
+    final url = '${Links.databaseUrl}/products.json?auth=$token';
     http.Response response;
     try {
       response = await http.post(url,
@@ -123,7 +120,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     // Update remotely
     final url =
-        '${Links.databaseUrl}/products/${product.id}.json';
+        '${Links.databaseUrl}/products/${product.id}.json?auth=$token';
     await http.patch(url,
         body: json.encode({
           'title': product.title,
@@ -141,7 +138,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     // Opmitistic deletion
-    final url = '${Links.databaseUrl}/products/$id.json';
+    final url = '${Links.databaseUrl}/products/$id.json?auth=$token';
     final index = _items.indexWhere((prod) => prod.id == id);
     final product = _items.elementAt(index);
     _items.removeAt(index);

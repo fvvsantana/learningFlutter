@@ -13,6 +13,8 @@ class Product with ChangeNotifier {
   final String imageUrl;
   bool isFavorite;
 
+  String token;
+
   Product({
     @required this.id,
     @required this.title,
@@ -27,7 +29,7 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final url = '${Links.databaseUrl}/products/$id';
+    final url = '${Links.databaseUrl}/products/$id.json?auth=$token';
 
     http.Response response;
     final revertFavorite = () {

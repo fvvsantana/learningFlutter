@@ -1,5 +1,3 @@
-import 'package:flutter/semantics.dart';
-
 class HttpException implements Exception {
   final String message;
 
