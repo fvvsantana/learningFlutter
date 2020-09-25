@@ -46,6 +46,7 @@ class Products with ChangeNotifier {
   ];
 
   String token;
+  String userId;
 
   List<Product> get items {
     return List<Product>.from(_items);
@@ -56,10 +57,10 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = '${Links.databaseUrl}/products.json?auth=$token';
+    final productsUrl = '${Links.databaseUrl}/products.json?auth=$token';
     http.Response response;
     try {
-      response = await http.get(url);
+      response = await http.get(productsUrl);
     } catch (error) {
       throw error;
     }
@@ -68,6 +69,13 @@ class Products with ChangeNotifier {
     if(data == null){
       return;
     }
+
+
+    final favUrl = '${Links.databaseUrl}/userFavorites/$userId.json?auth=$token';
+    final favResponse = await http.get(favUrl);
+    final favData = json.decode(favResponse.body);
+
+
     List<Product> fetchedProducts = [];
     data.forEach((prodId, prodData) {
       final product = Product(
@@ -76,7 +84,7 @@ class Products with ChangeNotifier {
         description: prodData['description'],
         price: prodData['price'],
         imageUrl: prodData['imageUrl'],
-        isFavorite: prodData['isFavorite'],
+        isFavorite: favData == null? false: favData[prodId] ?? false,
       );
       fetchedProducts.add(product);
     });

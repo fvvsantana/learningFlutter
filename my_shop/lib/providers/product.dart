@@ -14,6 +14,7 @@ class Product with ChangeNotifier {
   bool isFavorite;
 
   String token;
+  String userId;
 
   Product({
     @required this.id,
@@ -29,7 +30,7 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final url = '${Links.databaseUrl}/products/$id.json?auth=$token';
+    final url = '${Links.databaseUrl}/userFavorites/$userId/$id.json?auth=$token';
 
     http.Response response;
     final revertFavorite = () {
@@ -39,10 +40,8 @@ class Product with ChangeNotifier {
     };
 
     try {
-      response = await http.patch(url,
-          body: json.encode({
-            'isFavorite': isFavorite,
-          }));
+      response = await http.put(url,
+          body: json.encode(isFavorite));
     } catch (error) {
       try {
         revertFavorite();

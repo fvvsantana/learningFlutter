@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 class Auth with ChangeNotifier{
   String _token;
   DateTime _expiryDate;
-  String _userId;
+  String userId;
 
   bool get isAuthenticated{
     return token != null;
@@ -29,7 +29,7 @@ class Auth with ChangeNotifier{
     final data = json.decode(response.body);
     if(data == null) return;
     _token = data['idToken'];
-    _userId = data['localId'];
+    userId = data['localId'];
     _expiryDate = DateTime.now().add(Duration(seconds: int.parse(data['expiresIn'])));
     notifyListeners();
     

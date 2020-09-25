@@ -21,7 +21,11 @@ class ProductsGrid extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (ctx, i) => ChangeNotifierProxyProvider<Auth, Product>(
         create: (_) => products[i],
-        update: (_, auth, product) => product..token = auth.token,
+        update: (_, auth, product){
+          product.token = auth.token;
+          product.userId = auth.userId;
+          return product;
+        },
         child: ProductItem(),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
