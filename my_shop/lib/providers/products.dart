@@ -56,8 +56,13 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  Future<void> fetchAndSetProducts() async {
-    final productsUrl = '${Links.databaseUrl}/products.json?auth=$token';
+  Future<void> fetchAndSetProducts([bool userProductsOnly = false]) async {
+    String productsUrl;
+    if(userProductsOnly){
+      productsUrl = '${Links.databaseUrl}/products.json?auth=$token&orderBy="creatorId"&equalTo="$userId"';
+    }else{
+      productsUrl = '${Links.databaseUrl}/products.json?auth=$token&';
+    }
     http.Response response;
     try {
       response = await http.get(productsUrl);
@@ -104,6 +109,7 @@ class Products with ChangeNotifier {
             'price': product.price,
             'imageUrl': product.imageUrl,
             'isFavorite': product.isFavorite,
+            'creatorId': userId,
           }));
     } catch (error) {
       print(error);
