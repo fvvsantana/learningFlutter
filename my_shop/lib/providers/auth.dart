@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_complete_guide/utils/links.dart';
@@ -8,6 +9,7 @@ class Auth with ChangeNotifier{
   String _token;
   DateTime _expiryDate;
   String userId;
+  Timer _timer;
 
   bool get isAuthenticated{
     return token != null;
@@ -31,6 +33,13 @@ class Auth with ChangeNotifier{
     _token = data['idToken'];
     userId = data['localId'];
     _expiryDate = DateTime.now().add(Duration(seconds: int.parse(data['expiresIn'])));
+    if(_timer != null){
+      _timer.cancel();
+      _timer = null;
+      _autoSignOut();
+    }else{
+      _autoSignOut();
+    }
     notifyListeners();
     
   }
@@ -47,6 +56,17 @@ class Auth with ChangeNotifier{
     _token = null;
     _expiryDate = null;
     userId = null;
+    if(_timer != null){
+      _timer.cancel();
+      _timer = null;
+    }
     notifyListeners();
+  }
+
+  void _autoSignOut(){
+    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+    if(_timer == null){
+      _timer = Timer(Duration(seconds: timeToExpiry), signOut);
+    }
   }
 }
