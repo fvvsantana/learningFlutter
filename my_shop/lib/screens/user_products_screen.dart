@@ -61,6 +61,8 @@ class _UserProductsScreenState extends State<UserProductsScreen> {
                       ),
                     ),
                   );
+                }else if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(child:CircularProgressIndicator());
                 }else if(snapshot.hasError){
                   throw snapshot.error;
                 }else{
