@@ -23,13 +23,14 @@ class OrderItem {
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   String token;
+  String userId;
 
   List<OrderItem> get orders {
     return List.from(_orders);
   }
 
   Future<void> fetchAndSetOrders() async {
-    final url = '${Links.databaseUrl}/orders.json?auth=$token';
+    final url = '${Links.databaseUrl}/orders/$userId.json?auth=$token';
     final response = await http.get(url);
     /*
     I/flutter (19882): {"-MHwCIZI0D4RrgRSDz6-":{"amount":1172.99,"dateTime":"2020-09-23T15:23:55.653703","products":[{"id":"2020-09-23 15:23:46.043121","price":1.99,"quantity":1,"title":"test"},{"id":"2020-09-23 15:23:46.882453","price":1093.0,"quantity":1,"title":"one"},{"id":"2020-09-23 15:23:47.281641","price":78.0,"quantity":1,"title":"hey dude!"}]}}
@@ -59,7 +60,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = '${Links.databaseUrl}/orders.json?auth=$token';
+    final url = '${Links.databaseUrl}/orders/$userId.json?auth=$token';
     final now = DateTime.now();
 
     final response = await http.post(url,

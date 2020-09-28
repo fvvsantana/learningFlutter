@@ -42,6 +42,7 @@ class _UserProductsScreenState extends State<UserProductsScreen> {
             .fetchAndSetProducts(true),
         child: Padding(
           padding: EdgeInsets.all(8),
+
           child: FutureBuilder(
               future: fetchFuture,
               builder: (_, snapshot) {
