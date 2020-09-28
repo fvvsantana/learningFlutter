@@ -43,4 +43,10 @@ class Auth with ChangeNotifier{
     return _authenticate(email, password, Links.signInUrl);
   }
 
+  void signOut(){
+    _token = null;
+    _expiryDate = null;
+    userId = null;
+    notifyListeners();
+  }
 }
