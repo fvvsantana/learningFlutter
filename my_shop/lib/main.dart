@@ -4,6 +4,7 @@ import 'package:flutter_complete_guide/screens/auth_screen.dart';
 import 'package:flutter_complete_guide/screens/cart_screen.dart';
 import 'package:flutter_complete_guide/screens/edit_product_screen.dart';
 import 'package:flutter_complete_guide/screens/orders_screen.dart';
+import 'package:flutter_complete_guide/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import './screens/products_overview_screen.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProxyProvider<Auth, Products>(
             create: (_) => Products(),
-            update: (_, auth, products){
+            update: (_, auth, products) {
               products.token = auth.token;
               products.userId = auth.userId;
               return products;
@@ -35,13 +36,12 @@ class MyApp extends StatelessWidget {
             create: (_) => Cart(),
           ),
           ChangeNotifierProxyProvider<Auth, Orders>(
-            create: (_) => Orders(),
-            update: (_, auth, orders){
-              orders.token = auth.token;
-              orders.userId = auth.userId;
-              return orders;
-            }
-          ),
+              create: (_) => Orders(),
+              update: (_, auth, orders) {
+                orders.token = auth.token;
+                orders.userId = auth.userId;
+                return orders;
+              }),
         ],
         child: MaterialApp(
             title: 'MyShop',
@@ -54,7 +54,16 @@ class MyApp extends StatelessWidget {
               builder: (_, authData, __) {
                 return authData.isAuthenticated
                     ? ProductsOverviewScreen()
-                    : AuthScreen();
+                    : FutureBuilder(
+                        future: authData.tryLoadAuthData(),
+                        builder: (_, snapshot) =>
+                            snapshot.connectionState != ConnectionState.done
+                                ? SplashScreen()
+                                : AuthScreen(),
+                                /*: snapshot.data
+                                    ? ProductsOverviewScreen()
+                                    : AuthScreen(),*/
+                      );
               },
             ),
             routes: {
