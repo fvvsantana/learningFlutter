@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/helpers/custom_route.dart';
 import 'package:flutter_complete_guide/providers/auth.dart';
 import 'package:flutter_complete_guide/screens/auth_screen.dart';
 import 'package:flutter_complete_guide/screens/cart_screen.dart';
@@ -46,10 +47,13 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'MyShop',
             theme: ThemeData(
-              primarySwatch: Colors.purple,
-              accentColor: Colors.deepOrange,
-              fontFamily: 'Lato',
-            ),
+                primarySwatch: Colors.purple,
+                accentColor: Colors.deepOrange,
+                fontFamily: 'Lato',
+                pageTransitionsTheme: PageTransitionsTheme(builders: {
+                  TargetPlatform.android: CustomPageTransitionBuilder(),
+                  TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                })),
             home: Consumer<Auth>(
               builder: (_, authData, __) {
                 return authData.isAuthenticated
@@ -60,7 +64,7 @@ class MyApp extends StatelessWidget {
                             snapshot.connectionState != ConnectionState.done
                                 ? SplashScreen()
                                 : AuthScreen(),
-                                /*: snapshot.data
+                        /*: snapshot.data
                                     ? ProductsOverviewScreen()
                                     : AuthScreen(),*/
                       );
